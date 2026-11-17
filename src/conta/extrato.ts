@@ -1,3 +1,4 @@
+import dayjs from "dayjs";
 import { diasCorridos, type DataISO } from "../datas.ts";
 import { formatarBRL, type Centavos } from "../dinheiro.ts";
 
@@ -34,7 +35,7 @@ export function montarExtrato(
     })
     .sort((a, b) => b.data.localeCompare(a.data))
     .map((lancamento) => ({
-      data: `${lancamento.data.slice(8, 10)}/${lancamento.data.slice(5, 7)}`,
+      data: dayjs(lancamento.data).format("DD/MM"),
       descricao: lancamento.descricao,
       valor: formatarBRL(lancamento.valor),
     }));
