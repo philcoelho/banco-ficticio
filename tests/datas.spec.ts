@@ -10,6 +10,15 @@ describe("parseDataBR", () => {
     expect(() => parseDataBR("31/02/2026")).toThrow("inexistente");
     expect(() => parseDataBR("2026-11-05")).toThrow("inválida");
   });
+
+  it("aceita 29 de fevereiro só em ano bissexto", () => {
+    expect(parseDataBR("29/02/2028")).toBe("2028-02-29");
+    expect(() => parseDataBR("29/02/2027")).toThrow("inexistente");
+  });
+
+  it("ignora espaços em volta da data", () => {
+    expect(parseDataBR(" 05/11/2026 ")).toBe("2026-11-05");
+  });
 });
 
 describe("diasCorridos", () => {
