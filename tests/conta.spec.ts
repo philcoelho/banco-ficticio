@@ -14,6 +14,10 @@ describe("calcularSaldo", () => {
     );
   });
 
+  it("cobra a taxa proporcional aos dias ativos no mês", () => {
+    expect(calcularSaldo(10_000, 300, 10)).toBe(9_900);
+  });
+
   it("rejeita valores fracionados", () => {
     expect(() => calcularSaldo(100.5, 300)).toThrow("inteiros em centavos");
   });
