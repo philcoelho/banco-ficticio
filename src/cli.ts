@@ -13,7 +13,7 @@ if (!arquivo) {
 
 const { faturas, erros } = importarFaturasCsv(readFileSync(arquivo));
 if (faturas.length === 0) {
-  console.log("Nenhuma fatura valida encontrada no arquivo.");
+  console.log("Nenhuma fatura válida encontrada no arquivo.");
 }
 
 console.table(
