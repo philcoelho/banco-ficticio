@@ -15,12 +15,12 @@ export interface LinhaExtrato {
 }
 
 /** Janela padrão do extrato exibido ao cliente. */
-export const JANELA_PADRAO_DIAS = 30;
+export const JANELA_PADRAO_DIAS = 90;
 
 /**
  * Monta as linhas do extrato exibido ao cliente: só os lançamentos dentro
- * da janela (contada a partir da data de referência), do mais recente para
- * o mais antigo.
+ * da janela (contada a partir da data de referência), em ordem cronológica,
+ * como no extrato impresso.
  */
 export function montarExtrato(
   lancamentos: readonly Lancamento[],
@@ -32,7 +32,7 @@ export function montarExtrato(
       const idade = diasCorridos(lancamento.data, dataReferencia);
       return idade >= 0 && idade < janelaDias;
     })
-    .sort((a, b) => b.data.localeCompare(a.data))
+    .sort((a, b) => a.data.localeCompare(b.data))
     .map((lancamento) => ({
       data: `${lancamento.data.slice(8, 10)}/${lancamento.data.slice(5, 7)}`,
       descricao: lancamento.descricao,

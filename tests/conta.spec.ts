@@ -27,14 +27,15 @@ describe("montarExtrato", () => {
     { data: "2026-11-20", descricao: "Agendado", valor: -9_900 },
   ];
 
-  it("mostra só a janela de 30 dias, do mais recente para o mais antigo", () => {
+  it("mostra a janela de 90 dias em ordem cronológica", () => {
     expect(montarExtrato(lancamentos, "2026-11-17")).toEqual([
-      { data: "15/11", descricao: "Pix recebido", valor: "R$ 20,00" },
+      { data: "01/10", descricao: "Salário", valor: "R$ 5.000,00" },
       { data: "03/11", descricao: "Mercado", valor: "-R$ 123,45" },
+      { data: "15/11", descricao: "Pix recebido", valor: "R$ 20,00" },
     ]);
   });
 
   it("aceita outra janela", () => {
-    expect(montarExtrato(lancamentos, "2026-11-17", 60)).toHaveLength(3);
+    expect(montarExtrato(lancamentos, "2026-11-17", 30)).toHaveLength(2);
   });
 });
