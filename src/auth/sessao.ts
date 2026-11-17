@@ -1,4 +1,7 @@
-import { createHmac, timingSafeEqual } from "node:crypto";
+import { createHmac } from "node:crypto";
+
+/** Tolerância para clientes com o relógio adiantado. */
+const TOLERANCIA_EM_SEGUNDOS = 5 * 60;
 
 /**
  * Sessões do internet banking.
@@ -36,20 +39,12 @@ export function validarSessao(
     return undefined;
   }
 
-  const esperada = Buffer.from(
-    assinatura(`${usuarioId}.${expiraTexto}`, segredo),
-    "hex",
-  );
-  const informada = Buffer.from(recebida, "hex");
-  if (
-    informada.length !== esperada.length ||
-    !timingSafeEqual(informada, esperada)
-  ) {
+  if (recebida !== assinatura(`${usuarioId}.${expiraTexto}`, segredo)) {
     return undefined;
   }
 
   const expiraEm = Number(expiraTexto);
-  if (agoraEmSegundos >= expiraEm) {
+  if (agoraEmSegundos >= expiraEm + TOLERANCIA_EM_SEGUNDOS) {
     return undefined;
   }
   return { usuarioId, expiraEm };

@@ -11,11 +11,11 @@ describe("validarSessao", () => {
     expect(validarSessao(token, 1_799_999_999, SEGREDO)).toEqual(sessao);
   });
 
-  it("rejeita o token no instante da expiração e depois", () => {
+  it("rejeita o token depois da tolerância de expiração", () => {
     const token = emitirToken(sessao, SEGREDO);
 
-    expect(validarSessao(token, 1_800_000_000, SEGREDO)).toBeUndefined();
-    expect(validarSessao(token, 1_800_000_001, SEGREDO)).toBeUndefined();
+    expect(validarSessao(token, 1_800_000_000, SEGREDO)).toEqual(sessao);
+    expect(validarSessao(token, 1_800_000_300, SEGREDO)).toBeUndefined();
   });
 
   it("rejeita assinatura de outro segredo ou conteúdo adulterado", () => {
