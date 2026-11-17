@@ -1,0 +1,9 @@
+node_modules/
+coverage/
+dist/
+.env
+.env.*
+!.env.schema
+
+# material do instrutor (enunciados, guia e gabarito): não vai para o repositório
+material/

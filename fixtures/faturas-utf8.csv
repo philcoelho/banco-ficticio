@@ -1,0 +1,7 @@
+id;documento;cliente;valor;vencimento;status
+F-1001;123.456.789-09;Maria Conceição Araújo;1.250,00;05/11/2026;aberta
+F-1002;12.345.678/0001-95;Padaria São João Ltda;389,90;20/11/2026;aberta
+F-1003;987.654.321-00;José Antônio Simões;2.100,50;15/10/2026;paga
+F-1004;11.222.333/0001-81;Açougue Irmãos Gonçalves ME;742,15;01/11/2026;aberta
+F-1005;123.456.789-09;Maria Conceição Araújo;99,99;10/12/2026;cancelada
+F-1006;98.765.432/0001-10;Ótica Visão Clara;abc;30/11/2026;aberta

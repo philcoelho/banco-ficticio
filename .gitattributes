@@ -1,0 +1,5 @@
+# Mantém LF em todas as plataformas (Windows incluído): o Prettier
+# e o git apply dos arquivos em mrs/ dependem disso.
+* text=auto eol=lf
+*.csv -text
+*.patch -text

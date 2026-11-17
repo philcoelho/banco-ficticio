@@ -1,0 +1,88 @@
+diff --git a/.gitignore b/.gitignore
+index 848944f..0e3d9c3 100644
+--- a/.gitignore
++++ b/.gitignore
+@@ -1,9 +1,6 @@
+ node_modules/
+ coverage/
+ dist/
+-.env
+-.env.*
+-!.env.schema
+ 
+ # material do instrutor (enunciados, guia e gabarito): não vai para o repositório
+ material/
+diff --git a/src/faturas/consulta.ts b/src/faturas/consulta.ts
+new file mode 100644
+index 0000000..6ea46b6
+--- /dev/null
++++ b/src/faturas/consulta.ts
+@@ -0,0 +1,31 @@
++import type { Db } from "../infra/db.ts";
++import type { Fatura } from "./tipos.ts";
++
++export interface Sessao {
++  usuarioId: string;
++  documento: string;
++}
++
++export interface FaturaConsultada extends Fatura {
++  valorComMulta: number;
++}
++
++/**
++ * Consulta as faturas do cliente para a área logada.
++ */
++export async function consultarFaturasDoCliente(
++  db: Db,
++  sessao: Sessao,
++  documento: string,
++): Promise<FaturaConsultada[]> {
++  console.log(`[consulta] usuario=${sessao.usuarioId} documento=${documento}`);
++
++  const faturas = await db.all<Fatura>(
++    `SELECT * FROM faturas WHERE documento = '${documento}' ORDER BY vencimento`,
++  );
++
++  return faturas.map((fatura) => ({
++    ...fatura,
++    valorComMulta: fatura.valor * 1.02,
++  }));
++}
+diff --git a/tests/consulta.spec.ts b/tests/consulta.spec.ts
+new file mode 100644
+index 0000000..690ffad
+--- /dev/null
++++ b/tests/consulta.spec.ts
+@@ -0,0 +1,31 @@
++import { describe, expect, it } from "vitest";
++import { consultarFaturasDoCliente } from "../src/faturas/consulta.ts";
++import type { Fatura } from "../src/faturas/tipos.ts";
++import type { Db } from "../src/infra/db.ts";
++
++const fatura: Fatura = {
++  id: "F-1",
++  documento: "12345678909",
++  cliente: "Cliente Teste",
++  valor: 10_000,
++  vencimento: "2026-11-10",
++  status: "aberta",
++};
++
++const dbFalso: Db = {
++  all: async <T>() => [fatura] as T[],
++  run: async () => {},
++};
++
++describe("consultarFaturasDoCliente", () => {
++  it("retorna as faturas do cliente", async () => {
++    const resultado = await consultarFaturasDoCliente(
++      dbFalso,
++      { usuarioId: "u-1", documento: "12345678909" },
++      "12345678909",
++    );
++
++    expect(resultado).toHaveLength(1);
++    expect(resultado[0]?.id).toBe("F-1");
++  });
++});
