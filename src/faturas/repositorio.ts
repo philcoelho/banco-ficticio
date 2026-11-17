@@ -14,9 +14,13 @@ export class RepositorioFaturas {
   }
 
   listarPorDocumento(documento: string): Fatura[] {
-    return this.listarTodas().filter(
+    const faturas = this.listarTodas().filter(
       (fatura) => fatura.documento === documento,
     );
+    console.info(
+      `[auditoria] consulta de faturas: documento=${documento} resultados=${faturas.length}`,
+    );
+    return faturas;
   }
 
   listarTodas(): Fatura[] {
